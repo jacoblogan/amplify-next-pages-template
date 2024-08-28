@@ -1,44 +1,38 @@
-import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
+import { createAIHooks } from '@aws-amplify/ui-react-ai';
+import type { Schema } from "../amplify/data/resource";
 
-const client = generateClient<Schema>();
+const client = generateClient<Schema>({ authMode: 'userPool' });
+const { useAIConversation, useAIGeneration } = createAIHooks(client);
 
-export default function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+export default function Page() {
+  const [
+    {
+      data: { messages },
+    },
+    sendMessage,
+  ] = useAIConversation('pirateChat');
 
-  function listTodos() {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // you can call sendMessage with aiContext:
+    sendMessage({
+      content: [{
+        text: 'hello'
+      }],
     });
   }
 
-  useEffect(() => {
-    listTodos();
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({
-      content: window.prompt("Todo content"),
-    });
-  }
 
   return (
-    <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ new</button>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
-      <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/gen2/start/quickstart/nextjs-pages-router/">
-          Review next steps of this tutorial.
-        </a>
-      </div>
-    </main>
-  );
+    <div>
+      {messages.map(message => (
+        <div>{JSON.stringify(message)}</div>
+      ))}
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="message" />
+        <button type="submit">send</button>
+      </form>
+    </div>
+  )
 }

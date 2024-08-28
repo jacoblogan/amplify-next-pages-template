@@ -13,7 +13,9 @@
     "aws-amplify": "^6.4.0",
     "next": "14.1.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "@aws-amplify/ui-react-ai": "ai-release",
+    "@aws-amplify/ui-react": "ai-release"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.0.4",
@@ -28,6 +30,15 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "tsx": "^4.7.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@aws-amplify/graphql-conversation-transformer": "raven",
+    "@aws-amplify/graphql-generation-transformer": "raven"
+  },
+  "overrides": {
+    "@aws-amplify/appsync-modelgen-plugin": "raven",
+    "@aws-amplify/data-schema": "ai",
+    "@aws-amplify/graphql-api-construct": "raven",
+    "@aws-amplify/graphql-conversation-transformer": "raven",
+    "@aws-amplify/graphql-generation-transformer": "raven"
   }
 }
